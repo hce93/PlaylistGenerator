@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D91C03642CE3B8F80083D50D /* ID3TagEditor in Frameworks */ = {isa = PBXBuildFile; productRef = D9D6685B2CD005F700AF4B25 /* ID3TagEditor */; };
+		D9C208342D00A55C00F0AEAB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D9C208332D00A55C00F0AEAB /* Info.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D9C4FBF52CC6900D00FA3988 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -23,7 +28,30 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D90D30D82CE3C33200ABD347 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D90D30D92CE3CDEB00ABD347 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		D9C208332D00A55C00F0AEAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D9C4FBE32CC6900B00FA3988 /* PlaylistGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaylistGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9C4FBF42CC6900D00FA3988 /* PlaylistGeneratorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaylistGeneratorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9C4FBFE2CC6900D00FA3988 /* PlaylistGeneratorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaylistGeneratorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D91C03642CE3B8F80083D50D /* ID3TagEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +104,7 @@
 		D9C4FBDA2CC6900B00FA3988 = {
 			isa = PBXGroup;
 			children = (
+				D9C208332D00A55C00F0AEAB /* Info.plist */,
 				D9C4FBE52CC6900B00FA3988 /* PlaylistGenerator */,
 				D9C4FBF72CC6900D00FA3988 /* PlaylistGeneratorTests */,
 				D9C4FC012CC6900D00FA3988 /* PlaylistGeneratorUITests */,
@@ -102,6 +132,8 @@
 				D9C4FBDF2CC6900B00FA3988 /* Sources */,
 				D9C4FBE02CC6900B00FA3988 /* Frameworks */,
 				D9C4FBE12CC6900B00FA3988 /* Resources */,
+				D90D30D82CE3C33200ABD347 /* Embed Libraries */,
+				D90D30D92CE3CDEB00ABD347 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -112,6 +144,7 @@
 			);
 			name = PlaylistGenerator;
 			packageProductDependencies = (
+				D9D6685B2CD005F700AF4B25 /* ID3TagEditor */,
 			);
 			productName = PlaylistGenerator;
 			productReference = D9C4FBE32CC6900B00FA3988 /* PlaylistGenerator.app */;
@@ -195,6 +228,9 @@
 			);
 			mainGroup = D9C4FBDA2CC6900B00FA3988;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D9D6685A2CD005F700AF4B25 /* XCRemoteSwiftPackageReference "ID3TagEditor" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D9C4FBE42CC6900B00FA3988 /* Products */;
 			projectDirPath = "";
@@ -212,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9C208342D00A55C00F0AEAB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +358,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				"INFOPLIST_FILE[sdk=*]" = "$(PROJECT_DIR)/Info.plist";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -378,6 +416,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				"INFOPLIST_FILE[sdk=*]" = "$(PROJECT_DIR)/Info.plist";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -401,15 +440,23 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					/opt/homebrew/Cellar/taglib/1.13.1/lib,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PlaylistGenerator",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.henryevison.PlaylistGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -428,15 +475,23 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					/opt/homebrew/Cellar/taglib/1.13.1/lib,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PlaylistGenerator",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.henryevison.PlaylistGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -549,6 +604,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D9D6685A2CD005F700AF4B25 /* XCRemoteSwiftPackageReference "ID3TagEditor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/chicio/ID3TagEditor";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D9D6685B2CD005F700AF4B25 /* ID3TagEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9D6685A2CD005F700AF4B25 /* XCRemoteSwiftPackageReference "ID3TagEditor" */;
+			productName = ID3TagEditor;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D9C4FBDB2CC6900B00FA3988 /* Project object */;
 }
