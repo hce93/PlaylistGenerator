@@ -60,6 +60,7 @@ struct CreatePlaylist : View {
     
     var body : some View {
         NavigationStack {
+            // adding a new comment
             if currentMusicFolder == ""{
                 Text("Please set your library folder before continuing")
             } else if genreCoordinator.isLoading{
