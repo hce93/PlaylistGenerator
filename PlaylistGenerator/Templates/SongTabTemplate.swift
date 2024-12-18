@@ -30,20 +30,19 @@ struct SongTabView: NSViewRepresentable {
         func updateSongList(alteredAlbum: SongFile, add: Bool){
             if add {
                 // check if songs we need are already in the data store
-                var songsToAdd = Array(self.temporaryDataStore.filter({ $0.album == alteredAlbum.album }))
+                var songsToAdd = Array(self.temporaryDataStore.filter({ $0.album == alteredAlbum.album && $0.artist == alteredAlbum.artist}))
                 if songsToAdd.count <= 0 {
                     songsToAdd = readFolderNames(folder: alteredAlbum.url.relativePath, type: "Songs")
                     self.temporaryDataStore.formUnion(songsToAdd)
                 }
-//                let newSongs = readFolderNames(folder: alteredAlbum.url.relativePath, type: "Songs")
                 self.data.append(contentsOf: songsToAdd)
                 self.data = self.data.sorted(by: { $0.name < $1.name })
                 self.filteredData = self.data
                 self.checkedItems.formUnion(songsToAdd)
             } else {
-                self.data.removeAll { $0.album == alteredAlbum.album }
+                self.data.removeAll { $0.album == alteredAlbum.album && $0.artist == alteredAlbum.artist}
                 self.filteredData = self.data
-                self.checkedItems.subtract(self.checkedItems.filter({ $0.album == alteredAlbum.album }))
+                self.checkedItems.subtract(self.checkedItems.filter({ $0.album == alteredAlbum.album && $0.artist == alteredAlbum.artist }))
             }
         }
         
@@ -67,7 +66,7 @@ struct SongTabView: NSViewRepresentable {
                 if !albumsToAdd.isEmpty {
                     var newSongs = [SongFile]()
                     for album in albumsToAdd {
-                        var songsToAdd = Array(self.temporaryDataStore.filter({ $0.album == album.album }))
+                        var songsToAdd = Array(self.temporaryDataStore.filter({ $0.album == album.album && $0.artist == album.artist }))
                         if songsToAdd.count <= 0 {
                             songsToAdd = readFolderNames(folder: album.url.relativePath, type: "Songs")
                             self.temporaryDataStore.formUnion(songsToAdd)

@@ -18,7 +18,7 @@ struct Home : View {
                     Spacer()
                         .frame(height: geometry.size.height * 0.125) // Top margin
                     
-                    VStack(spacing: 20) { 
+                    VStack {
                         Image("logo")
                             .resizable()
                             .scaledToFit()
@@ -27,27 +27,47 @@ struct Home : View {
                             .shadow(color: Color.black, radius: 10, x: 0, y: 0)
                         Spacer()
                             .frame(height: 30)
-                        Text("Welcome to the Playlist Generator. To get started please set your Music Library Folder below:")
                         
-                        if !currentMusicFolder.isEmpty {
-                            VStack(spacing: 10) {
-                                Text("Your current Music Folder Path is set to: ")
-                                Text(currentMusicFolder)
-                            }
-                        }
                         VStack(spacing: 10) {
-                            Text("Set Library Folder Here")
                             
-                            Button(action: {
-                                Task {
-                                    await selectMusicLibrary()
+                            Text("""
+                                Welcome to the Playlist Generator!
+                                For info on how to use the app please visit the info page
+                            """)
+                                .frame(maxWidth: .infinity)
+                                .multilineTextAlignment(.center)
+                            
+                            
+                            if !currentMusicFolder.isEmpty {
+                                VStack(spacing: 10) {
+                                    Text("Your current Music Folder is set to: ")
+                                    Text(currentMusicFolder)
+                                        .italic(true)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 4)
+                                        .background(Color.secondary.opacity(0.1))
+                                        .cornerRadius(8)
                                 }
-                            }) {
-                                Label("Add Music Library", systemImage: "folder.badge.plus")
                             }
-                            
-                            Toggle(isOn: $forgetFolder) {
-                                Text("Remove folder from memory when you close the app")
+                            VStack(spacing: 10) {
+                                if currentMusicFolder.isEmpty {
+                                    Text("Set your music library location here")
+                                }
+                                Button(action: {
+                                    Task {
+                                        await selectMusicLibrary()
+                                    }
+                                }) {
+                                    if currentMusicFolder.isEmpty {
+                                        Text("Add Music Library")
+                                    } else {
+                                        Text("Update Music Library")
+                                    }
+                                }
+//                                
+//                                Toggle(isOn: $forgetFolder) {
+//                                    Text("Remove folder from memory when you close the app")
+//                                }
                             }
                         }
 

@@ -44,12 +44,8 @@ struct ContentView : View {
                    Text("Info")
                }
                .buttonStyle(PlainButtonStyle())
-//                       Button(action: {updateDisplay(display: "setFolder")}) {
-//                           Text("Update Music Folder Location")
-//                       }
-//                       .buttonStyle(PlainButtonStyle())
                Button(action: {updateDisplay(display: "updateGenre")}) {
-                   Text("Update Genre")
+                   Text("Update Genres")
                }
                .buttonStyle(PlainButtonStyle())
                .disabled(currentMusicFolder == "")

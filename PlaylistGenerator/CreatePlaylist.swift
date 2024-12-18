@@ -44,12 +44,11 @@ struct CreatePlaylist : View {
     @State private var albumSelected = false
     @State private var genreSelected = false
     
-    @State private var artistSelectAll = false
-    @State private var artistToggleSelected = false
-    @State private var albumSelectAll = false
-    @State private var albumToggleSelected = false
-    @State private var genreSelectAll = false
-    @State private var genreToggleSelected = false
+    @State private var toggleButtonDict : [String : [String: Bool]] = ["Artist":["Select All" : false, "Toggle Selected" : false],
+                                                                       "Album":["Select All" : false, "Toggle Selected" : false],
+                                                                       "Genre":["Select All" : false, "Toggle Selected" : false]]
+    
+    @State private var playlistNameAlert = false
     
     let playlistLengths = Array(stride(from: 5, through: 60, by: 5))
     let playlistProportions = Array(stride(from: 5, through: 60, by: 5))
@@ -98,24 +97,34 @@ struct CreatePlaylist : View {
                                 
                                 HStack {
                                     Button(action : {
-                                        artistSelectAll.toggle()
+                                        toggleButtonDict["Artist"]!["Select All"]!.toggle()
+                                        
                                         Task  {
                                             await artistCoordinator.toggleCheckAllFilteredItems()
                                         }
                                     }) {
-                                        Text(artistSelectAll ? "Unselect All" : "Select All")
+                                        Text(toggleButtonDict["Artist"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
                                     Button(action : {
-                                        artistSelectAll = true
-                                        if artistCoordinator.getSelectedItems().count > 0 {
-                                            artistToggleSelected.toggle()
+                                        let selectedCount = artistCoordinator.getSelectedItems().count
+                                        let filteredCount = artistCoordinator.filteredData.count
+                                        
+                                        if selectedCount > 0 && !(filteredCount == selectedCount){
+                                            toggleButtonDict["Artist"]!["Toggle Selected"]!.toggle()
                                         } else {
-                                            artistToggleSelected = false
+                                            toggleButtonDict["Artist"]!["Toggle Selected"]! = false
                                         }
+                                        
                                         artistCoordinator.toggleDisplaySelectedItems()
+                                        if artistCoordinator.filteredData.count > artistCoordinator.getSelectedItems().count {
+                                            toggleButtonDict["Artist"]!["Select All"]! = false
+                                        } else {
+                                            toggleButtonDict["Artist"]!["Select All"]! = true
+                                        }
+                                        
                                     }) {
-                                        Text(artistToggleSelected ? "Show All" : "View Selected")
+                                        Text(toggleButtonDict["Artist"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
                                 }
@@ -163,24 +172,33 @@ struct CreatePlaylist : View {
                                 HStack {
                                     
                                     Button(action : {
-                                        albumSelectAll.toggle()
+                                        toggleButtonDict["Album"]!["Select All"]!.toggle()
                                         Task  {
                                             await albumCoordinator.toggleCheckAllFilteredItems()
                                         }
                                     }) {
-                                        Text(albumSelectAll ? "Unselect All" : "Select All")
+                                        Text(toggleButtonDict["Album"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
                                     Button(action : {
-                                        albumSelectAll = true
-                                        if albumCoordinator.getSelectedItems().count > 0 {
-                                            albumToggleSelected.toggle()
+                                    
+                                        let selectedCount = albumCoordinator.selectedAlbums.count
+                                        let filteredCount = albumCoordinator.filteredData.count
+                                        
+                                        if selectedCount > 0 && !(filteredCount == selectedCount){
+                                            toggleButtonDict["Album"]!["Toggle Selected"]!.toggle()
                                         } else {
-                                            albumToggleSelected = false
+                                            toggleButtonDict["Album"]!["Toggle Selected"]! = false
                                         }
+                                        
                                         albumCoordinator.toggleDisplaySelectedItems()
+                                        if albumCoordinator.filteredData.count > albumCoordinator.selectedAlbums.count {
+                                            toggleButtonDict["Album"]!["Select All"]! = false
+                                        } else {
+                                            toggleButtonDict["Album"]!["Select All"]! = true
+                                        }
                                     }) {
-                                        Text(albumToggleSelected ? "Show All" : "View Selected")
+                                        Text(toggleButtonDict["Album"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
                                 }
@@ -222,22 +240,31 @@ struct CreatePlaylist : View {
                                     .frame(maxWidth: .infinity, alignment: .center)
                                 HStack {
                                     Button(action : {
-                                        genreSelectAll.toggle()
+                                        toggleButtonDict["Genre"]!["Select All"]!.toggle()
                                         genreCoordinator.toggleCheckAllFilteredItems()
                                     }) {
-                                        Text(genreSelectAll ? "Unselect All" : "Select All")
+                                        Text(toggleButtonDict["Genre"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
                                     Button(action : {
-                                        genreSelectAll = true
-                                        if genreCoordinator.getSelectedItems().count > 0 {
-                                            genreToggleSelected.toggle()
+                                        
+                                        let selectedCount = genreCoordinator.getSelectedItems().count
+                                        let filteredCount = genreCoordinator.filteredData.count
+                                        
+                                        if selectedCount > 0 && !(filteredCount == selectedCount){
+                                            toggleButtonDict["Genre"]!["Toggle Selected"]!.toggle()
                                         } else {
-                                            genreToggleSelected = false
+                                            toggleButtonDict["Genre"]!["Toggle Selected"]! = false
                                         }
+                                        
                                         genreCoordinator.toggleDisplaySelectedItems()
+                                        if genreCoordinator.filteredData.count > genreCoordinator.getSelectedItems().count {
+                                            toggleButtonDict["Genre"]!["Select All"]! = false
+                                        } else {
+                                            toggleButtonDict["Genre"]!["Select All"]! = true
+                                        }
                                     }) {
-                                        Text(genreToggleSelected ? "Show All" : "View Selected")
+                                        Text(toggleButtonDict["Genre"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
                                 }
@@ -290,12 +317,12 @@ struct CreatePlaylist : View {
                         VStack {
                             TextField("Playlist Name", text: $playlistName)
                                 .multilineTextAlignment(.center) // Aligns the text to the center
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .textFieldStyle(
+                                    RoundedBorderTextFieldStyle()
+                                )
                                 .frame(width: 350)
-                            PlaylistTableViewWrapper(data: $playlistTableData)
-                        }
 
-                        VStack {
+                            PlaylistTableViewWrapper(data: $playlistTableData)
                             
                             HStack{
                                 Button(action : {
@@ -308,12 +335,20 @@ struct CreatePlaylist : View {
                                 }
                                 
                                 Button(action : {
-                                    let selected = playlistTableData.filter{ $0.isChecked }
-                                    let selectedURLs = selected.map{ $0.url }
-                                    _ = submitPlaylist(playlistName: $playlistName.wrappedValue, URLs: selectedURLs)
+                                    if playlistName.isEmpty {
+                                        playlistNameAlert = true
+                                    } else {
+                                        playlistNameAlert = false
+                                        let selected = playlistTableData.filter{ $0.isChecked }
+                                        let selectedURLs = selected.map{ $0.url }
+                                        _ = submitPlaylist(playlistName: $playlistName.wrappedValue, URLs: selectedURLs)
+                                    }
                                 }) {
                                     Text("Save Playlist")
                                         .frame(width: 125)
+                                }
+                                .alert("Please enter a playlist name", isPresented: $playlistNameAlert) {
+                                    Button("OK", role: .cancel) { }
                                 }
                             }
                         }
@@ -327,10 +362,6 @@ struct CreatePlaylist : View {
             if newSelection.count > 0 {
                 playlistSettings.songPerGenre = 100 - playlistSettings.songPerAlbum - playlistSettings.songPerArtist
                 
-                if genreCoordinator.getSelectedItems().count == genreCoordinator.filteredData.count {
-                    genreToggleSelected = true
-                    genreSelectAll = true
-                }
             } else {
                 playlistSettings.songPerGenre = 0
                 if artistSelected {
@@ -339,25 +370,14 @@ struct CreatePlaylist : View {
                     playlistSettings.songPerAlbum = 100
                 }
             }
-            if newSelection.count < initialSelection.count {
-                genreSelectAll = false
-                
-                if newSelection.count == 0 && genreCoordinator.filteredData.count < genreCoordinator.data.count {
-                    genreToggleSelected = true
-                } else {
-                    genreToggleSelected = false
-                }
-            }
+            
+            updateToggleButtons(genreCoordinator: genreCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Genre")
         }
         .onChange(of: artistCoordinator.checkedItems) { initialSelection, newSelection in
             artistSelected = newSelection.count > 0
             if newSelection.count > 0 {
                 playlistSettings.songPerArtist = 100 - playlistSettings.songPerAlbum - playlistSettings.songPerGenre
                 
-                if artistCoordinator.getSelectedItems().count == artistCoordinator.filteredData.count {
-                    artistToggleSelected = true
-                    artistSelectAll = true
-                }
             } else {
                 playlistSettings.songPerArtist = 0
                 if albumSelected {
@@ -366,25 +386,16 @@ struct CreatePlaylist : View {
                     playlistSettings.songPerGenre = 100
                 }
             }
-            if newSelection.count < initialSelection.count {
-                artistSelectAll = false
-                
-                if newSelection.count == 0 && artistCoordinator.filteredData.count < artistCoordinator.data.count {
-                    artistToggleSelected = true
-                } else {
-                    artistToggleSelected = false
-                }
-            }
+            
+            updateToggleButtons(albumArtistCoordinator: artistCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Artist")
+            
+            
         }
         .onChange(of: albumCoordinator.checkedItems) { initialSelection, newSelection in
             albumSelected = newSelection.count > 0
             if newSelection.count > 0 {
                 playlistSettings.songPerAlbum = 100 - playlistSettings.songPerArtist - playlistSettings.songPerGenre
                 
-                if newSelection.count == albumCoordinator.filteredData.count {
-                    albumToggleSelected = true
-                    albumSelectAll = true
-                }
             } else {
                 playlistSettings.songPerAlbum = 0
                 if artistSelected {
@@ -393,15 +404,8 @@ struct CreatePlaylist : View {
                     playlistSettings.songPerGenre = 100
                 }
             }
-            if newSelection.count < initialSelection.count {
-                albumSelectAll = false
-                
-                if newSelection.count == 0 && albumCoordinator.filteredData.count < albumCoordinator.data.count {
-                    albumToggleSelected = true
-                } else {
-                    albumToggleSelected = false
-                }
-            }
+            
+            updateToggleButtons(albumArtistCoordinator: albumCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Album")
         }
         .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
             // Listen for UserDefaults changes
@@ -409,6 +413,78 @@ struct CreatePlaylist : View {
         }
         .onAppear {
             currentMusicFolder = getMusicFolderLocation()
+            updateToggleButtons(albumArtistCoordinator: albumCoordinator, type: "Album")
+            updateToggleButtons(genreCoordinator: genreCoordinator, type: "Genre")
+            updateToggleButtons(albumArtistCoordinator: artistCoordinator, type: "Artist")
+        }
+    }
+    // update toggle button logic for when the view page is selected
+    func updateToggleButtons(albumArtistCoordinator : MusicFolderTabView.Coordinator? = nil, genreCoordinator : GenreTabView.Coordinator? = nil, type : String) {
+        
+        let selectedItemsCount = albumArtistCoordinator != nil ? type == "Album" ? albumArtistCoordinator!.selectedAlbums.count : albumArtistCoordinator!.getSelectedItems().count : genreCoordinator!.getSelectedItems().count
+        let filteredItemsCount = albumArtistCoordinator != nil ? albumArtistCoordinator!.filteredData.count : genreCoordinator!.filteredData.count
+        let totalItemsCount = albumArtistCoordinator != nil ? albumArtistCoordinator!.data.count : genreCoordinator!.data.count
+        
+        if filteredItemsCount != selectedItemsCount {
+            toggleButtonDict[type]!["Select All"] = false
+        } else {
+            toggleButtonDict[type]!["Select All"] = true
+        }
+        
+        if filteredItemsCount == totalItemsCount || (selectedItemsCount==0 && filteredItemsCount == totalItemsCount) || filteredItemsCount != selectedItemsCount {
+            toggleButtonDict[type]!["Toggle Selected"] = false
+        } else {
+            toggleButtonDict[type]!["Toggle Selected"] = true
+        }
+        
+    }
+    
+    // update toggle button logic for when the checkboxes are interacted with by the user
+    func updateToggleButtons<T: Hashable>(albumArtistCoordinator : MusicFolderTabView.Coordinator? = nil, genreCoordinator : GenreTabView.Coordinator? = nil, initialSelection : Set<T>? = nil, newSelection : Set<T>? = nil, type : String) {
+        
+        let selectedItemsCount = albumArtistCoordinator != nil ? albumArtistCoordinator!.getSelectedItems().count : genreCoordinator!.getSelectedItems().count
+        let filteredItemsCount = albumArtistCoordinator != nil ? albumArtistCoordinator!.filteredData.count : genreCoordinator!.filteredData.count
+        let totalItemsCount = albumArtistCoordinator != nil ? albumArtistCoordinator!.data.count : genreCoordinator!.data.count
+        
+        // If newSelection and initialSelection != nil then he user is interacting with the checkboxes.
+        // If = nil then it is when the page opens
+        if let newSelection = newSelection, let initialSelection = initialSelection {
+            if toggleButtonDict.keys.contains(type) {
+                if newSelection.count > 0 && newSelection.count == filteredItemsCount {
+                    toggleButtonDict[type]!["Select All"] = true
+                    toggleButtonDict[type]!["Toggle Selected"] = true
+                }
+                
+                if newSelection.count < initialSelection.count {
+                    toggleButtonDict[type]!["Select All"] = false
+                    
+                    if newSelection.count == 0 && filteredItemsCount < totalItemsCount {
+                        toggleButtonDict[type]!["Toggle Selected"] = true
+                    } else {
+                        toggleButtonDict[type]!["Toggle Selected"] = false
+                    }
+                }
+                
+                if newSelection.count < filteredItemsCount && newSelection.count != 0{
+                    toggleButtonDict[type]!["Toggle Selected"] = false
+                }
+                
+                if newSelection.count == filteredItemsCount && filteredItemsCount == totalItemsCount{
+                    toggleButtonDict[type]!["Toggle Selected"] = false
+                }
+            }
+        } else {
+            if filteredItemsCount == selectedItemsCount {
+                toggleButtonDict[type]!["Select All"] = false
+            } else {
+                toggleButtonDict[type]!["Select All"] = true
+            }
+            
+            if filteredItemsCount == totalItemsCount || selectedItemsCount==0{
+                toggleButtonDict[type]!["Toggle Selected"] = false
+            } else {
+                toggleButtonDict[type]!["Toggle Selected"] = true
+            }
         }
     }
     
