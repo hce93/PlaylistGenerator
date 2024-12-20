@@ -7,9 +7,11 @@
 import SwiftUI
 
 struct SongTabView: NSViewRepresentable {
+    
     @ObservedObject var songCoordinator: SongCoordinator
     
     class SongCoordinator: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSSearchFieldDelegate, ObservableObject {
+        
         var selectedAlbums = Set<SongFile>()
         var data = [SongFile]()
         @Published var filteredData = [SongFile]() // Records to display on search
@@ -19,15 +21,18 @@ struct SongTabView: NSViewRepresentable {
         var temporaryDataStore = Set<SongFile>()
         
         func updateSelectedAlbums(album: SongFile, add: Bool) {
+            
             if self.selectedAlbums.contains(album) {
                 self.selectedAlbums.remove(album)
             } else {
                 self.selectedAlbums.insert(album)
             }
             self.updateSongList(alteredAlbum: album, add: add)
+            
         }
         
         func updateSongList(alteredAlbum: SongFile, add: Bool){
+            
             if add {
                 // check if songs we need are already in the data store
                 var songsToAdd = Array(self.temporaryDataStore.filter({ $0.album == alteredAlbum.album && $0.artist == alteredAlbum.artist}))
@@ -44,9 +49,11 @@ struct SongTabView: NSViewRepresentable {
                 self.filteredData = self.data
                 self.checkedItems.subtract(self.checkedItems.filter({ $0.album == alteredAlbum.album && $0.artist == alteredAlbum.artist }))
             }
+            
         }
         
         func toggleAllSongsByAlbums(albums: Set<SongFile>) async {
+            
             //update song list with all selected albums
             if albums.isEmpty {
                 self.data = []
@@ -71,8 +78,6 @@ struct SongTabView: NSViewRepresentable {
                             songsToAdd = readFolderNames(folder: album.url.relativePath, type: "Songs")
                             self.temporaryDataStore.formUnion(songsToAdd)
                         }
-//                        let albumURL = album.url
-//                        let songsToAdd = readFolderNames(folder: albumURL.relativePath, type: "Songs")
                         newSongs.append(contentsOf: songsToAdd)
                     }
                     self.data.append(contentsOf: newSongs)
@@ -85,36 +90,46 @@ struct SongTabView: NSViewRepresentable {
                 }
                 self.selectedAlbums = albums
             }
+            
         }
         
         func toggleAllFilteredSongs(albums: [SongFile] = []) {
+            
             if self.checkedItems == Set(filteredData) {
                 self.checkedItems = Set()
             } else {
                 self.checkedItems = Set(filteredData)
             }
+            
         }
         
         func toggleDisplaySelectedItems() {
+            
             if Set(self.filteredData) == self.checkedItems || self.checkedItems.isEmpty{
                 self.filteredData = self.data
             } else {
                 self.filteredData = Array(self.checkedItems).sorted(by: { $0.name < $1.name })
             }
+            
         }
         
         func numberOfRows(in tableView: NSTableView) -> Int {
+            
             filteredData.count
+            
         }
         
         func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+            
             let checkbox = NSButton(checkboxWithTitle: filteredData[row].name, target: self, action: #selector(checkboxToggled(_:)))
             checkbox.tag = row
             checkbox.state = checkedItems.contains(filteredData[row]) ? .on : .off
             return checkbox
+            
         }
         
         @objc func checkboxToggled(_ sender: NSButton) {
+            
             let item = filteredData[sender.tag]
             
             if checkedItems.contains(item) {
@@ -122,14 +137,18 @@ struct SongTabView: NSViewRepresentable {
             } else {
                 checkedItems.insert(item)
             }
+            
         }
         
         func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+            
             toggleCheckbox(forRow: row, inTableView: tableView)
             return false
+            
         }
         
         private func toggleCheckbox(forRow row: Int, inTableView tableView: NSTableView) {
+            
             let item = filteredData[row]
             
             if checkedItems.contains(item) {
@@ -137,18 +156,18 @@ struct SongTabView: NSViewRepresentable {
             } else {
                 checkedItems.insert(item)
             }
-            
             tableView.reloadData(forRowIndexes: IndexSet(integer: row), columnIndexes: IndexSet(integer: 0))
+            
         }
         
         func getSelectedItems() -> Set<SongFile> {
+            
             return checkedItems
+            
         }
         
         func controlTextDidChange(_ notification: Notification) {
             
-
-            // Get the search field object from the notification
             if let searchField = notification.object as? NSSearchField {
                 let searchText = searchField.stringValue.lowercased()
                 if searchText == "" {
@@ -162,15 +181,19 @@ struct SongTabView: NSViewRepresentable {
                             tableView.reloadData()
                 }
             }
+            
         }
         
     }
     
     func makeCoordinator() -> SongCoordinator {
+        
         return songCoordinator
+        
     }
     
     func makeNSView(context: Context) -> NSScrollView {
+        
         let scrollView = NSScrollView()
         let tableView = NSTableView()
         let searchField = NSSearchField()
@@ -215,9 +238,11 @@ struct SongTabView: NSViewRepresentable {
         ])
         
         return containerScrollView
+        
     }
     
     func updateNSView(_ nsView: NSScrollView, context: Context) {
+        
         // Access the NSStackView as the document view
         if let stackView = nsView.documentView as? NSStackView {
             // Find the NSTableView within the stack view's arrangedSubviews
@@ -231,5 +256,7 @@ struct SongTabView: NSViewRepresentable {
         } else {
             print("Document view is not an NSStackView.")
         }
+        
     }
+    
 }

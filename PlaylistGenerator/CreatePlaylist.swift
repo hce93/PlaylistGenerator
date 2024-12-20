@@ -9,6 +9,7 @@ import SwiftUI
 import MusicKit
 import AppKit
 
+// used to hold/display generated playlist
 struct PlaylistTableRow {
     var title: String
     var album: String
@@ -17,6 +18,7 @@ struct PlaylistTableRow {
     var url: URL
 }
 
+// use class with published variables for settings so they are maintained in the application's session
 class PlaylistSettings: ObservableObject {
     @Published var songPerArtist: Int = 0
     @Published var songPerAlbum: Int = 0
@@ -29,15 +31,17 @@ class PlaylistSettings: ObservableObject {
         self.songPerGenre = songPerGenre
         self.selection = selection
     }
+    
 }
 
 struct CreatePlaylist : View {
-    @State private var currentMusicFolder: String = ""
+    
     @ObservedObject var artistCoordinator : MusicFolderTabView.Coordinator
     @ObservedObject var albumCoordinator : MusicFolderTabView.Coordinator
     @ObservedObject var genreCoordinator : GenreTabView.Coordinator
     @ObservedObject var playlistSettings : PlaylistSettings
     
+    @State private var currentMusicFolder: String = ""
     @State private var playlistLoading = false
     
     @State private var artistSelected = false
@@ -49,29 +53,39 @@ struct CreatePlaylist : View {
                                                                        "Genre":["Select All" : false, "Toggle Selected" : false]]
     
     @State private var playlistNameAlert = false
-    
-    let playlistLengths = Array(stride(from: 5, through: 60, by: 5))
-    let playlistProportions = Array(stride(from: 5, through: 60, by: 5))
-    
     @State private var playlistName : String = ""
     @State private var playlistSongFiles = [SongFile]()
     @State private var playlistTableData: [PlaylistTableRow] = []
     
+    let playlistLengths = Array(stride(from: 5, through: 60, by: 5))
+    let playlistProportions = Array(stride(from: 5, through: 60, by: 5))
+    
     var body : some View {
+        
         NavigationStack {
-            // adding a new comment
+            
             if currentMusicFolder == ""{
+                
                 Text("Please set your library folder before continuing")
+                
             } else if genreCoordinator.isLoading{
+                
                 LoadingOverlay(comment: "This could take a minute or so depending on the size of your music library", colour: Color.black)
+                
             } else if playlistLoading {
+                
                 LoadingOverlay(comment: "Generating playlist", colour: Color.gray)
-            }
-            else {
+                
+            }else {
+                
                 GeometryReader { geometry in
+                    
                     VStack{
+                        
                         HStack {
+                            
                             Spacer()
+                            
                             Button(action : {
                                 artistCoordinator.updateData()
                                 albumCoordinator.updateData()
@@ -83,11 +97,16 @@ struct CreatePlaylist : View {
                                     .font(.system(size: 14))
                             }
                             .buttonStyle(.plain)
+                            
                         }
+                        
                         HStack{
+                            
                             VStack(alignment: .leading){
+                                
                                 Text("Artists")
                                     .frame(maxWidth: .infinity, alignment: .center)
+                                
                                 MusicFolderTabView(
                                     selectedView: "Artists",
                                     coordinator: artistCoordinator,
@@ -96,6 +115,7 @@ struct CreatePlaylist : View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 
                                 HStack {
+                                    
                                     Button(action : {
                                         toggleButtonDict["Artist"]!["Select All"]!.toggle()
                                         
@@ -106,6 +126,7 @@ struct CreatePlaylist : View {
                                         Text(toggleButtonDict["Artist"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
+                                    
                                     Button(action : {
                                         let selectedCount = artistCoordinator.getSelectedItems().count
                                         let filteredCount = artistCoordinator.filteredData.count
@@ -127,6 +148,7 @@ struct CreatePlaylist : View {
                                         Text(toggleButtonDict["Artist"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
+                                    
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 
@@ -160,8 +182,10 @@ struct CreatePlaylist : View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                             
                             VStack(alignment: .leading){
+                                
                                 Text("Albums")
                                     .frame(maxWidth: .infinity, alignment: .center)
+                                
                                 MusicFolderTabView(
                                     selectedView: "Albums",
                                     coordinator: albumCoordinator,
@@ -180,8 +204,8 @@ struct CreatePlaylist : View {
                                         Text(toggleButtonDict["Album"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
-                                    Button(action : {
                                     
+                                    Button(action : {
                                         let selectedCount = albumCoordinator.selectedAlbums.count
                                         let filteredCount = albumCoordinator.filteredData.count
                                         
@@ -201,6 +225,7 @@ struct CreatePlaylist : View {
                                         Text(toggleButtonDict["Album"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
+                                    
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 
@@ -234,11 +259,15 @@ struct CreatePlaylist : View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                             
                             VStack(alignment: .leading){
+                                
                                 Text("Genres")
                                     .frame(maxWidth: .infinity, alignment: .center)
+                                
                                 GenreTabView(coordinator: genreCoordinator)
                                     .frame(maxWidth: .infinity, alignment: .center)
+                                
                                 HStack {
+                                    
                                     Button(action : {
                                         toggleButtonDict["Genre"]!["Select All"]!.toggle()
                                         genreCoordinator.toggleCheckAllFilteredItems()
@@ -246,6 +275,7 @@ struct CreatePlaylist : View {
                                         Text(toggleButtonDict["Genre"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
+                                    
                                     Button(action : {
                                         
                                         let selectedCount = genreCoordinator.getSelectedItems().count
@@ -267,6 +297,7 @@ struct CreatePlaylist : View {
                                         Text(toggleButtonDict["Genre"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
+                                    
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 
@@ -281,6 +312,7 @@ struct CreatePlaylist : View {
                         .frame(height: geometry.size.height * 0.45)
                         
                         VStack {
+                            
                             Picker("Number of songs in playlist", selection: $playlistSettings.selection) {
                                 ForEach(playlistLengths, id: \.self) {
                                     Text("\($0)")
@@ -312,9 +344,12 @@ struct CreatePlaylist : View {
                                 
                             }
                         }
+                        
                         Spacer()
                             .frame(height: 20)
+                        
                         VStack {
+                            
                             TextField("Playlist Name", text: $playlistName)
                                 .multilineTextAlignment(.center) // Aligns the text to the center
                                 .textFieldStyle(
@@ -325,6 +360,7 @@ struct CreatePlaylist : View {
                             PlaylistTableViewWrapper(data: $playlistTableData)
                             
                             HStack{
+                                
                                 Button(action : {
                                     Task{
                                         await selectSongToAddToPlaylist()
@@ -350,14 +386,21 @@ struct CreatePlaylist : View {
                                 .alert("Please enter a playlist name", isPresented: $playlistNameAlert) {
                                     Button("OK", role: .cancel) { }
                                 }
+                                
                             }
                         }
                     }
                 }
                 .padding(10)
+                
+                Spacer()
+                    .frame(height: 10)
+                
             }
         }
+        // onChange logic handles updating toggle buttons and ensuring % selections add up to 100%
         .onChange(of: genreCoordinator.checkedItems) { initialSelection, newSelection in
+            
             genreSelected = newSelection.count > 0
             if newSelection.count > 0 {
                 playlistSettings.songPerGenre = 100 - playlistSettings.songPerAlbum - playlistSettings.songPerArtist
@@ -372,8 +415,10 @@ struct CreatePlaylist : View {
             }
             
             updateToggleButtons(genreCoordinator: genreCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Genre")
+            
         }
         .onChange(of: artistCoordinator.checkedItems) { initialSelection, newSelection in
+            
             artistSelected = newSelection.count > 0
             if newSelection.count > 0 {
                 playlistSettings.songPerArtist = 100 - playlistSettings.songPerAlbum - playlistSettings.songPerGenre
@@ -389,9 +434,9 @@ struct CreatePlaylist : View {
             
             updateToggleButtons(albumArtistCoordinator: artistCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Artist")
             
-            
         }
         .onChange(of: albumCoordinator.checkedItems) { initialSelection, newSelection in
+            
             albumSelected = newSelection.count > 0
             if newSelection.count > 0 {
                 playlistSettings.songPerAlbum = 100 - playlistSettings.songPerArtist - playlistSettings.songPerGenre
@@ -406,18 +451,24 @@ struct CreatePlaylist : View {
             }
             
             updateToggleButtons(albumArtistCoordinator: albumCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Album")
+            
         }
         .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+            
             // Listen for UserDefaults changes
             currentMusicFolder = getMusicFolderLocation()
+            
         }
         .onAppear {
+            
             currentMusicFolder = getMusicFolderLocation()
             updateToggleButtons(albumArtistCoordinator: albumCoordinator, type: "Album")
             updateToggleButtons(genreCoordinator: genreCoordinator, type: "Genre")
             updateToggleButtons(albumArtistCoordinator: artistCoordinator, type: "Artist")
+            
         }
     }
+    
     // update toggle button logic for when the view page is selected
     func updateToggleButtons(albumArtistCoordinator : MusicFolderTabView.Coordinator? = nil, genreCoordinator : GenreTabView.Coordinator? = nil, type : String) {
         
@@ -449,6 +500,7 @@ struct CreatePlaylist : View {
         // If newSelection and initialSelection != nil then he user is interacting with the checkboxes.
         // If = nil then it is when the page opens
         if let newSelection = newSelection, let initialSelection = initialSelection {
+            
             if toggleButtonDict.keys.contains(type) {
                 if newSelection.count > 0 && newSelection.count == filteredItemsCount {
                     toggleButtonDict[type]!["Select All"] = true
@@ -473,7 +525,9 @@ struct CreatePlaylist : View {
                     toggleButtonDict[type]!["Toggle Selected"] = false
                 }
             }
+            
         } else {
+            
             if filteredItemsCount == selectedItemsCount {
                 toggleButtonDict[type]!["Select All"] = false
             } else {
@@ -485,10 +539,12 @@ struct CreatePlaylist : View {
             } else {
                 toggleButtonDict[type]!["Toggle Selected"] = true
             }
+            
         }
     }
     
     func selectSongToAddToPlaylist() async {
+        
         let songURLs = await openAddSongPanel()
         if !songURLs.isEmpty {
             playlistLoading = true
@@ -507,10 +563,10 @@ func sortSongsForPlaylistGenerator(allSongs: [SongFile], genres: Set<String>, ar
 
     //use a set for genre songs originally to ensure no song duplicates across multiple genres
     var genreSongs = Set<SongFile>()
-    
     let albumSongs = allSongs.filter { albums.contains($0.album) }
     let artistSongs = allSongs.filter { artists.contains($0.artist) && !albums.contains($0.album) }
     let allSongsExclArtistSongs = allSongs.filter { !artistSongs.contains($0) }
+    
     for genre in genres {
         let genreSongsToBeFiltered = allSongsExclArtistSongs.filter{ $0.genreTags.contains(genre) }
         genreSongs.formUnion(Set(genreSongsToBeFiltered.filter{ !artistSongs.contains($0) }))
@@ -519,6 +575,7 @@ func sortSongsForPlaylistGenerator(allSongs: [SongFile], genres: Set<String>, ar
     let songDict = ["genre" : Array(genreSongs), "artist" : artistSongs, "album" : albumSongs]
     
     return songDict
+    
 }
 
 
@@ -528,8 +585,10 @@ func handleSubmitToGeneratePlaylist(genres: Set<String>, allSongs: [SongFile], s
     
     let count = filterdSongDict.values.flatMap{ $0 }.count
     if count <= size {
+        
         print("Requested playlist size was \(size) and we found only \(count) songs. Returning all songs.")
         return filterdSongDict.values.flatMap{ $0 }
+        
     } else {
         for key in filterdSongDict.keys {
             if !filterdSongDict[key]!.isEmpty {
@@ -545,24 +604,30 @@ func handleSubmitToGeneratePlaylist(genres: Set<String>, allSongs: [SongFile], s
         
         return playlist
     }
+    
 }
 
 func getPlaylistTableData(playlist: [SongFile]) async -> [PlaylistTableRow]{
+    
     var playlistData = [PlaylistTableRow]()
+    
     for song in playlist {
-//        await playlistData.append(PlaylistTableRow(title: song.getTitle(), album: song.album, artist: song.artist, isChecked: true, url: song.url))
         let row = await generatePlaylistTableRow(song: song)
         playlistData.append(row)
     }
     return playlistData
+    
 }
 
 func generatePlaylistTableRow(song: SongFile) async -> PlaylistTableRow{
+    
     let row =  await PlaylistTableRow(title: song.getTitle(), album: song.album, artist: song.artist, isChecked: true, url: song.url)
     return row
+    
 }
 
 func openAddSongPanel() async -> [URL] {
+    
 // used continuation to ensure async is adhered to as NSOpenPanel is callback based
     return await withCheckedContinuation{ continuation in
         DispatchQueue.main.async {
@@ -583,6 +648,6 @@ func openAddSongPanel() async -> [URL] {
                 }
             }
         }
-        
     }
+    
 }

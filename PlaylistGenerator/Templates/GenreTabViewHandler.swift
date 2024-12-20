@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct TabHandler : View {
+    
     @State private var selectedItems = Set<SongFile>()
     @State private var selectedTab = "Artists"
     @State private var selectedAlbums = [String]()
@@ -28,13 +29,16 @@ struct TabHandler : View {
     let tabOptions = ["Artists", "Albums"]
     
     var body: some View {
+        
         NavigationStack {
             
             if isLoading {
                 LoadingOverlay(comment: loadingComment, colour: Color.gray)
             } else {
                 VStack{
+                    
                     HStack {
+                        
                         Spacer()
                         Button(action : {
                             Task {
@@ -48,15 +52,21 @@ struct TabHandler : View {
                         }
                         .buttonStyle(.plain)
                     }
+                    
                     TabView(selection: $selectedTab) {
+                        
                         VStack(spacing: 20) {
+                            
                             MusicFolderTabView(
                                 selectedView: "Artists",
                                 coordinator: artistCoordinator,
                                 songCoordinator: songCoordinator
                             )
-                            .padding(20)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 20)
+                            
                             HStack{
+                                
                                 Button(action : {
                                     toggleButtonDict["Artist"]!["Select All"]!.toggle()
                                     
@@ -67,6 +77,7 @@ struct TabHandler : View {
                                     Text(toggleButtonDict["Artist"]!["Select All"]! ? "Unselect All" : "Select All")
                                         .frame(width: 100)
                                 }
+                                .padding(.bottom, 10)
                                 
                                 Button(action : {
                                     let selectedCount = artistCoordinator.getSelectedItems().count
@@ -87,7 +98,9 @@ struct TabHandler : View {
                                 }) {
                                     Text(toggleButtonDict["Artist"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                         .frame(width: 100)
-                                }
+                                    }
+                                    .padding(.bottom, 10)
+                                
                             }
                             
                         }
@@ -95,14 +108,19 @@ struct TabHandler : View {
                         .tag("Artists")
                         
                         HStack(spacing: 20) {
+                            
                             VStack{
+                                
                                 MusicFolderTabView(
                                     selectedView: "Albums",
                                     coordinator: albumCoordinator,
                                     songCoordinator: songCoordinator
                                 )
-                                .padding(20)
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 20)
+                                
                                 HStack {
+                                    
                                     Button(action : {
                                         toggleButtonDict["Album"]!["Select All"]!.toggle()
                                         Task  {
@@ -115,9 +133,9 @@ struct TabHandler : View {
                                         Text(toggleButtonDict["Album"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
+                                    .padding(.bottom, 10)
                                     
                                     Button(action : {
-                                    
                                         let selectedCount = albumCoordinator.selectedAlbums.count
                                         let filteredCount = albumCoordinator.filteredData.count
                                         
@@ -137,24 +155,30 @@ struct TabHandler : View {
                                         Text(toggleButtonDict["Album"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
+                                    .padding(.bottom, 10)
+                                    
                                 }
                                 
                             }
+                            
                             VStack{
+                                
                                 SongTabView(songCoordinator: songCoordinator)
-                                    .padding(20)
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal, 20)
+                                
                                 HStack{
+                                    
                                     Button(action : {
-//                                        songSelectAll.toggle()
                                         toggleButtonDict["Song"]!["Select All"]!.toggle()
                                         songCoordinator.toggleAllFilteredSongs()
                                     }) {
                                         Text(toggleButtonDict["Song"]!["Select All"]! ? "Unselect All" : "Select All")
                                             .frame(width: 100)
                                     }
+                                    .padding(.bottom, 10)
                 
                                     Button(action : {
-                                        
                                         let selectedCount = songCoordinator.getSelectedItems().count
                                         let filteredCount = songCoordinator.filteredData.count
                                         
@@ -174,9 +198,12 @@ struct TabHandler : View {
                                         Text(toggleButtonDict["Song"]!["Toggle Selected"]! ? "Show All" : "View Selected")
                                             .frame(width: 100)
                                     }
+                                    .padding(.bottom, 10)
+                                    
                                 }
                                 
                             }
+                            
                         }
                         .tabItem { Text("Albums") }
                         .tag("Albums")
@@ -202,26 +229,36 @@ struct TabHandler : View {
                         ListAlertView(items: alertList)
                             .frame(width: 400, height: 400)
                     }
+                    
                 }
                 .padding(10)
             }
+            
+            Spacer()
+                .frame(height: 10)
+            
         }
         .onChange(of: albumCoordinator.checkedItems) { initialSelection, newSelection in
             
             updateToggleButtons(albumArtistCoordinator: albumCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Album")
+            
         }
         .onChange(of: artistCoordinator.checkedItems) { initialSelection, newSelection in
             
             updateToggleButtons(albumArtistCoordinator: artistCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Artist")
+            
         }
         .onChange(of: songCoordinator.checkedItems) { initialSelection, newSelection in
             
             updateToggleButtons(songCoordinator: songCoordinator, initialSelection: initialSelection, newSelection: newSelection, type: "Song")
+            
         }
         .onAppear {
+            // update the toggle buttons when the user selects the view so they match what has been previously selected
             updateToggleButtons(albumArtistCoordinator: albumCoordinator, type: "Album")
             updateToggleButtons(songCoordinator: songCoordinator, type: "Song")
             updateToggleButtons(albumArtistCoordinator: artistCoordinator, type: "Artist")
+            
         }
     }
     
@@ -275,10 +312,12 @@ struct TabHandler : View {
                 toggleButtonDict[type]!["Toggle Selected"] = false
             }
         }
+        
     }
 
     
     func updateSongGenres(files: [SongFile]) async {
+        
         let sortedURLS = sortURLs(files: files)
         let mp3URLs = sortedURLS.0
         let nonMp3URLs = sortedURLS.1
@@ -289,9 +328,11 @@ struct TabHandler : View {
             alertList = updateErrors
             showAlert = true
         }
+        
     }
     
     func sortURLs(files: [SongFile]) -> ([URL],[URL]) {
+        
         var mp3URLs = [URL]()
         var nonMp3URLs = [URL]()
         for file in files {
@@ -316,10 +357,13 @@ struct TabHandler : View {
                 }
             }
         }
+        
         return (mp3URLs, nonMp3URLs)
+        
     }
     
     func updateTags(mp3URLs: [URL], nonMp3URLs: [URL]) async -> [String]{
+        
         // Use ID3 to update mp3 files and AVFoundation for non mp3
         var errors = [String]()
         
@@ -341,5 +385,6 @@ struct TabHandler : View {
             errors.append(contentsOf: updates)
         }
         return errors
+        
     }
 }

@@ -15,32 +15,39 @@ struct Home : View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
+                    
                     Spacer()
-                        .frame(height: geometry.size.height * 0.125) // Top margin
                     
                     VStack {
+                        
+                        Spacer()
+                        
                         Image("logo")
                             .resizable()
                             .scaledToFit()
                             .cornerRadius(40)
-                            .frame(width: 500, height: 200)
+                            .frame(width: 500, height: 170)
                             .shadow(color: Color.black, radius: 10, x: 0, y: 0)
-                        Spacer()
-                            .frame(height: 30)
                         
+                        Spacer()
+                        
+                        Text("Welcome to the Playlist Generator!")
+                            .font(.title)
+                        
+                        Text("For info on how to use the app please visit the info page")
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
+
+                        Spacer()
+
                         VStack(spacing: 10) {
                             
-                            Text("""
-                                Welcome to the Playlist Generator!
-                                For info on how to use the app please visit the info page
-                            """)
-                                .frame(maxWidth: .infinity)
-                                .multilineTextAlignment(.center)
-                            
-                            
                             if !currentMusicFolder.isEmpty {
+                                
                                 VStack(spacing: 10) {
+                                    
                                     Text("Your current Music Folder is set to: ")
+                                    
                                     Text(currentMusicFolder)
                                         .italic(true)
                                         .padding(.horizontal, 10)
@@ -49,11 +56,17 @@ struct Home : View {
                                         .cornerRadius(8)
                                 }
                             }
+                            
                             VStack(spacing: 10) {
+                                
                                 if currentMusicFolder.isEmpty {
+                                    
                                     Text("Set your music library location here")
+                                    
                                 }
+                                
                                 Button(action: {
+                                    
                                     Task {
                                         await selectMusicLibrary()
                                     }
@@ -64,17 +77,21 @@ struct Home : View {
                                         Text("Update Music Library")
                                     }
                                 }
-//                                
-//                                Toggle(isOn: $forgetFolder) {
-//                                    Text("Remove folder from memory when you close the app")
-//                                }
                             }
                         }
-
+                        .padding(.horizontal, 30)
+                        .padding(.vertical, 20)
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(8)
+                        
+                        Spacer()
+                        
                     }
-                    .frame(height: geometry.size.height * 0.75)                    
+                    .frame(height: geometry.size.height * 0.75)
+                    .frame(maxHeight: 700)
+                    
                     Spacer()
-                        .frame(height: geometry.size.height * 0.125) // Bottom margin
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }

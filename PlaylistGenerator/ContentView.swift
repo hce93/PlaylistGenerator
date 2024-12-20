@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ContentView : View {
     @StateObject private var artistCoordinatorGenreView : MusicFolderTabView.Coordinator
     @StateObject private var albumCoordinatorGenreView : MusicFolderTabView.Coordinator
@@ -21,6 +20,7 @@ struct ContentView : View {
     @State private var currentMusicFolder: String = getMusicFolderLocation()
     
     init() {
+        //initialise all coordinators for the app which hold the artist, album and song data
         let initialSongCoordinatorGenreView = SongTabView.SongCoordinator()
         _artistCoordinatorGenreView = StateObject(wrappedValue: MusicFolderTabView.Coordinator(selectedView: "Artists", songCoordinator: initialSongCoordinatorGenreView))
         _albumCoordinatorGenreView = StateObject(wrappedValue: MusicFolderTabView.Coordinator(selectedView: "Albums", songCoordinator: initialSongCoordinatorGenreView))
@@ -34,53 +34,63 @@ struct ContentView : View {
     }
     
     var body : some View {
-        NavigationSplitView {
-           List {
-               Button(action: {updateDisplay(display: "Home")}) {
-                   Text("Home")
-               }
-               .buttonStyle(PlainButtonStyle())
-               Button(action: {updateDisplay(display: "Info")}) {
-                   Text("Info")
-               }
-               .buttonStyle(PlainButtonStyle())
-               Button(action: {updateDisplay(display: "updateGenre")}) {
-                   Text("Update Genres")
-               }
-               .buttonStyle(PlainButtonStyle())
-               .disabled(currentMusicFolder == "")
-               Button(action: {updateDisplay(display: "playlist")}) {
-                   Text("Create New Playlists")
-               }
-               .buttonStyle(PlainButtonStyle())
-               .disabled(currentMusicFolder == "")
-           }
-           .listStyle(SidebarListStyle())
-           .navigationTitle("Menu")
-       } detail: {
-           detailView
-       }
-       .onChange(of: currentMusicFolder) {
-           if currentMusicFolder != "" {
-               updateCoordinators()
-           }
-       }
-       .frame(minWidth: 1050, maxWidth: .infinity, minHeight: 650, maxHeight: .infinity)
+        GeometryReader { geometry in
+            
+            NavigationSplitView {
+                
+                List {
+                    
+                    Button(action: {updateDisplay(display: "Home")}) {
+                        Text("Home")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button(action: {updateDisplay(display: "Info")}) {
+                        Text("Info")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button(action: {updateDisplay(display: "updateGenre")}) {
+                        Text("Update Genres")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .disabled(currentMusicFolder == "")
+                    
+                    Button(action: {updateDisplay(display: "playlist")}) {
+                        Text("Create New Playlists")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .disabled(currentMusicFolder == "")
+                    
+                }
+                .listStyle(SidebarListStyle())
+                .navigationTitle("Menu")
+                
+            } detail: {
+                
+                detailView
+                    .frame(minWidth: geometry.size.width - 200)
+                
+            }
+            .onChange(of: currentMusicFolder) {
+                if currentMusicFolder != "" {
+                    updateCoordinators()
+                }
+            }
+        }
+        .frame(minWidth: 1050, maxWidth: .infinity, minHeight: 650, maxHeight: .infinity)
     }
     
     private var detailView: some View {
         switch currentDisplay {
         case "Info":
             return AnyView(Info())
-//        case "setFolder":
-//            return AnyView(SetLibraryFolder(currentMusicFolder: $currentMusicFolder))
         case "updateGenre":
             return AnyView(UpdateGenre(artistCoordinator: artistCoordinatorGenreView, albumCoordinator: albumCoordinatorGenreView, songCoordinator: songCoordinatorGenreView))
         case "playlist":
             return AnyView(CreatePlaylist(artistCoordinator: artistCoordinatorPlaylistView, albumCoordinator: albumCoordinatorPlaylistView, genreCoordinator: genreCoordinator, playlistSettings: playlistSettings))
         default:
             return AnyView(Home(currentMusicFolder: $currentMusicFolder))
-            
         }
     }
     
