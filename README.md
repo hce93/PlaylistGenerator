@@ -23,5 +23,5 @@ For every song you want to update the genre for we will use the **Music Brainz A
 In the "Artists" tab you will see a list of all the artists in your library. Here you can select as many or as little artists as you want, you can also use the search bar at the top to help you easily find artists. Once you have found the artists you want to update the genres just hit submit and the app will do the rest of the work. The app will cycle through every song for that artists you checked and update the genres. 
 In the "Album" tab you can select a number of albums and the right hand table will populate with all the songs for that album. By default all of these songs will be selected. However, you are able to uncheck as many or as little songs as you like. Once you've finalised the list. All the checked songs will then have their genres updated.
 
-![Genre Tab](PlaylistGenerator/Assets.xcassets/genreScreenshot3.imageset/genreScreenshot1.png)
+![Genre Tab](PlaylistGenerator/Assets.xcassets/genreScreenshot1.imageset/genreScreenshot1.png)
 
