@@ -65,13 +65,13 @@ struct MusicBrainzRatingResponse: Codable {
     let rating : Rating
 }
 
-func getSongGenre(title : String, album: String, artist : String) async throws -> String {
+func getSongGenre(album: String, artist : String) async throws -> String {
+    
     let baseURLString = "https://musicbrainz.org/ws/2/release-group/?query=release:"
     let queryString = "\"\(album)\" AND artist:\"\(artist)\""
     let queryParameter = "&fmt=json"
     let encodedQuery = customURLEncode(queryString)
     let initialQueryString = "\(baseURLString)\(encodedQuery)\(queryParameter)"
-//    let initialQueryString = "https://musicbrainz.org/ws/2/release-group/?query=release:\"\(album)\" AND artist:\"\(artist)\" &fmt=json"
     var secondQueryString = ""
     
     var genreList = [(name: String, count: Int?)]()
@@ -81,32 +81,44 @@ func getSongGenre(title : String, album: String, artist : String) async throws -
         let data = try await fetchData(from: initialQueryString)
         let firstResponse = try JSONDecoder().decode(MusicBrainzReleaseResponse.self, from: data)
         
-        for release in firstResponse.releaseGroups{
-            if release.primaryType == "Album"{
-                let firstID = release.id
-                secondQueryString = "https://musicbrainz.org/ws/2/release-group/\( firstID)?inc=genres&fmt=json"
+        var foundGenre = false
+        var genreResponse = MusicBeanzGenreResponse(genres: [])
+        while foundGenre == false{
+ 
+            for release in firstResponse.releaseGroups{
                 
-                let genreData = try await fetchData(from: secondQueryString)
-                let genreResponse = try JSONDecoder().decode(MusicBeanzGenreResponse.self, from: genreData)
-                
-                for genre in genreResponse.genres{
-                    genreList.append((name: genre.name, count: genre.count))
+                if release.primaryType == "Album"{
+                    
+                    let firstID = release.id
+                    secondQueryString = "https://musicbrainz.org/ws/2/release-group/\( firstID)?inc=genres&fmt=json"
+                    
+                    let genreData = try await fetchData(from: secondQueryString)
+                    genreResponse = try JSONDecoder().decode(MusicBeanzGenreResponse.self, from: genreData)
+                    
+                    if !genreResponse.genres.isEmpty{
+                        
+                        foundGenre = true
+                        break
+                    }
                 }
-                
-                SortedGenreList = genreList.sorted{
-                    ($0.count ?? 0) > ($1.count ?? 0)
-                }
-                
-                break
             }
         }
+        
+        for genre in genreResponse.genres{
+            genreList.append((name: genre.name, count: genre.count))
+        }
+        
+        SortedGenreList = genreList.sorted{
+            ($0.count ?? 0) > ($1.count ?? 0)
+        }
+                
     } catch {
         print("Errors: \(error)")
     }
     
     var returnGenre = ""
     if SortedGenreList.isEmpty {
-        throw NoGenreError.noGenreReturned("No genre was returned for artist: \(artist) album: \(album) title: \(title)")
+        throw NoGenreError.noGenreReturned("No genre was returned for artist: \(artist) album: \(album)")
     } else {
         returnGenre = SortedGenreList[0].name
     }
@@ -116,6 +128,7 @@ func getSongGenre(title : String, album: String, artist : String) async throws -
 
 
 func fetchData(from urlPath: String) async throws -> Data {
+    
     guard let url = URL(string: urlPath) else {
         print("Invalid URL")
         throw NSError(domain: "URL", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
@@ -138,11 +151,8 @@ func fetchData(from urlPath: String) async throws -> Data {
 }
 
 func getSongRating(song: SongFile) async{
-    // get song id
-    let songFileTitle = await song.getTitle()
-    
-//    let initialQueryString = "https://musicbrainz.org/ws/2/recording/?query=recording:\"\(songFileTitle)\" AND artist:\"\(song.artist)\" AND release:\"\(song.album)\"&fmt=json"
 
+    let songFileTitle = await song.getTitle()
     let baseURLString = "https://musicbrainz.org/ws/2/recording/?query=recording:"
     let queryString = "\"\(songFileTitle)\" AND artist:\"\(song.artist)\" AND release:\"\(song.album)\""
     let queryParameter = "&fmt=json"
@@ -158,9 +168,6 @@ func getSongRating(song: SongFile) async{
         } else {
             var recordingId = ""
             
-            // NEED TO ENSURE THAT WE CHECK ALBUM WHEN WE SEND THE FIRST QUERY and primary type is album
-            // ^ add it to the codings at the top
-            
             for item in response {
                 if normalizeCharacters(in: item.title.lowercased()) == normalizeCharacters(in: songFileTitle.lowercased()){
                     for release in item.releases {
@@ -169,28 +176,33 @@ func getSongRating(song: SongFile) async{
                             break
                         }
                     }
-                    
                 }
             }
+            
             if recordingId != "" {
+                
                 let secondQueryString = "https://musicbrainz.org/ws/2/recording/\(recordingId)?inc=ratings&fmt=json"
                 let ratingData = try await fetchData(from: secondQueryString)
                 let ratingResponse = try JSONDecoder().decode(MusicBrainzRatingResponse.self, from: ratingData).rating
                 if song.updateRating(rating: ratingResponse.value){
                     print("song rating updated to \(ratingResponse.value) for song \(songFileTitle)")
                 }
+                
             } else {
+                
                 throw NoSongError.noSongReturned("No song info was found for \(song.artist) - \(song.album) - \(songFileTitle)")
+                
             }
         }
         } catch {
         print("Errors getting rating for \(song.artist) - \(song.album) - \(songFileTitle) setting rating to zero")
-        let complete = song.updateRating(rating: 0.0)
+        let _ = song.updateRating(rating: 0.0)
     }
 }
 
 // below is used to convert special characters to ASCII equivalents
 func normalizeCharacters(in string: String) -> String {
+    
     let replacements: [String: String] = [
         // Apostrophes
         "’": "'",  // Right single quotation mark
@@ -218,9 +230,11 @@ func normalizeCharacters(in string: String) -> String {
     ]
 
     var normalizedString = string
+    
     for (original, replacement) in replacements {
         normalizedString = normalizedString.replacingOccurrences(of: original, with: replacement)
     }
+    
     return normalizedString
 }
 
@@ -270,4 +284,5 @@ func customURLEncode(_ string: String) -> String {
     }
 
     return encodedString
+    
 }

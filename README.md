@@ -8,6 +8,9 @@ A macOS app to update genre tags in your music library and create personalized p
 - Create custom playlists based on your favorite artists, albums, and/or genres.
 - **Music Brainz** database is used to gather genre data (selected according to the Music Brainz popularity rating) as well as rating scores (Music Brainz user submitted scores).
     - The genre data is used to update genre tags and the rating is forms part of the playlist generating process.
+- The following library is used as an mp3 metadata editor to update genre tags
+    - https://github.com/chicio/ID3TagEditor
+- AVFoundation is used to update non mp3 file genres
 
 ## How To Use
 Firstly, the user will need to select their music library on the home page (landing screen). Once this is done the user can use the following features of the app.
@@ -28,7 +31,7 @@ In the "Album" tab you can select a number of albums and the right hand table wi
 ![Genre Tab](PlaylistGenerator/Assets.xcassets/genreScreenshot1.imageset/genreScreenshot1.png)
 ![Genre Tab](PlaylistGenerator/Assets.xcassets/genreScreenshot2.imageset/genreScreenshot2.png)
 
-## Create Playlists
+## Creating Playlists:
 
 To generate playlists you can choose from a combination of artists, genres and albums. The songs that make up the users selection will be randomised and then the playlist generator will select one song from each artist/album/genre according to their rating in the Music Brainz's database (which uses user review scores). This will then loop until the playlist is populated.
 

@@ -4,7 +4,6 @@
 //
 //  Created by Henry Evison on 14/11/2024.
 //
-// This file is currently not in use but lef tin case id3 tags were needed to be used for mp3 files instead of AVFoundation
 
 import SwiftUI
 import Foundation
@@ -22,6 +21,7 @@ enum ID3TagError: Error {
 
 func updateID3GenreTags(fileURLs: [URL]) async -> [String]{
     var errorList = [String]()
+    var genreDict : [String : [String:String]] = [:]
     for url in fileURLs {
  
         let tagEditor = ID3TagEditor()
@@ -35,11 +35,9 @@ func updateID3GenreTags(fileURLs: [URL]) async -> [String]{
             if let tag = try tagEditor.read(from: url.path){
                 let artistFrame = tag.frames[.artist] as? ID3FrameWithStringContent
                 let albumFrame = tag.frames[.album] as? ID3FrameWithStringContent
-                let titleFrame = tag.frames[.title] as? ID3FrameWithStringContent
                 
                 let artist = (artistFrame?.content ?? "") as String
                 let album = (albumFrame?.content ?? "") as String
-                let title = (titleFrame?.content ?? "") as String
                 
                 var builder = ID32v3TagBuilder()
                 do {
@@ -49,8 +47,21 @@ func updateID3GenreTags(fileURLs: [URL]) async -> [String]{
                     continue
                 }
                 
+                var suggestedGenre: String
+                // check if the genre is held within the dictionary so we dont have to send repeat requests
+                if var artistDict = genreDict[artist] {
+                    if let albumGenre = artistDict[album] {
+                        suggestedGenre = albumGenre
+                    } else {
+                        suggestedGenre = try await getSongGenre(album: album, artist: artist)
+                        artistDict[album] = suggestedGenre
+                        genreDict[artist] = artistDict
+                    }
+                } else {
+                    suggestedGenre = try await getSongGenre(album: album, artist: artist)
+                    genreDict[artist] = [album: suggestedGenre]
+                }
                 
-                let suggestedGenre = try await getSongGenre(title: title, album: album, artist: artist)
                 if suggestedGenre == "" {
                     errorList.append("\(url.pathComponents.suffix(3).joined(separator: " - ")) - No Genre Found")
                     continue

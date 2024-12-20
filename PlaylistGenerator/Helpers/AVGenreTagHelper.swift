@@ -16,13 +16,14 @@ enum FileTypeError: Error {
 func updateAVGenreTags(fileURLs: [URL]) async -> [String]{
     var errorList = [String]()
     let fileManager = FileManager.default
+    var genreDict : [String : [String:String]] = [:]
+    
     for url in fileURLs{
         // Load the audio file as an AVAsset
         let asset = AVURLAsset(url: url)
         
         var artist: String?
         var album: String?
-        var title: String?
         
         do{
             var existingMetadata = try await asset.load(.metadata)
@@ -38,10 +39,6 @@ func updateAVGenreTags(fileURLs: [URL]) async -> [String]{
                         if album == nil{
                             album = try await item.load(.stringValue)
                         }
-                    case "title":
-                        if title == nil{
-                            title = try await item.load(.stringValue)
-                        }
                     default:
                         break
                     }
@@ -50,7 +47,7 @@ func updateAVGenreTags(fileURLs: [URL]) async -> [String]{
             }
             
             // if artist, album or title isnt held in the metadata we can use the file structure as a fallback
-            if (artist == nil) || (album == nil) || (title == nil) {
+            if (artist == nil) || (album == nil){
                 let pathComponents = url.pathComponents
                 if artist == nil{
                     artist = pathComponents[pathComponents.count - 3]
@@ -58,18 +55,25 @@ func updateAVGenreTags(fileURLs: [URL]) async -> [String]{
                 if album == nil{
                     album = pathComponents[pathComponents.count - 2]
                 }
-                if title == nil{
-                    let titleToBeCleaned = pathComponents[pathComponents.count - 1]
-                    let pattern = "^\\d{1,2} "
-                    let fileType = url.pathExtension
-                    title = titleToBeCleaned.replacingOccurrences(of: pattern, with: "", options: .regularExpression).replacingOccurrences(of: fileType, with: "")
-                    
-                }
+
             }
             
-
-            if (artist != nil) && (album != nil) && (title != nil) {
-                let suggestedGenre = try await getSongGenre(title: title!, album: album!, artist: artist!)
+            if (artist != nil) && (album != nil){
+                // check if the genre is held within the dictionary so we dont have to send repeat requests
+                var suggestedGenre: String
+                if var artistDict = genreDict[artist!] {
+                    if let albumGenre = artistDict[album!] {
+                        suggestedGenre = albumGenre
+                    } else {
+                        suggestedGenre = try await getSongGenre(album: album!, artist: artist!)
+                        artistDict[album!] = suggestedGenre
+                        genreDict[artist!] = artistDict
+                    }
+                } else {
+                    suggestedGenre = try await getSongGenre(album: album!, artist: artist!)
+                    genreDict[artist!] = [album!: suggestedGenre]
+                }
+                
                 if suggestedGenre == ""{
                     errorList.append("\(url.pathComponents.suffix(3).joined(separator: " - ")) - No Genre Found")
                     continue

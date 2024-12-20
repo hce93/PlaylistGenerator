@@ -386,6 +386,64 @@
             endingLineNumber = "69"
             landmarkName = "toggleAllSongsByAlbums(albums:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9CBD117F-E45D-47B0-BBDE-26A307151902 - 3fad7a541bf52fa2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for PlaylistGenerator.SongTabView.SongCoordinator.toggleAllSongsByAlbums(albums: Swift.Set&lt;PlaylistGenerator.SongFile&gt;) async -&gt; ()"
+                  moduleName = "PlaylistGenerator.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/oliviastapleton/Documents/PlaylistGenerator/PlaylistGenerator/Templates/SongTabTemplate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69">
+               </Location>
+               <Location
+                  uuid = "9CBD117F-E45D-47B0-BBDE-26A307151902 - bc03ce487b7ac9ad"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for PlaylistGenerator.SongTabView.SongCoordinator.toggleAllSongsByAlbums(albums: Swift.Set&lt;PlaylistGenerator.SongFile&gt;) async -&gt; ()"
+                  moduleName = "PlaylistGenerator.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/oliviastapleton/Documents/PlaylistGenerator/PlaylistGenerator/Templates/SongTabTemplate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69">
+               </Location>
+               <Location
+                  uuid = "9CBD117F-E45D-47B0-BBDE-26A307151902 - cb6a4f3e9c78946f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) await resume partial function for PlaylistGenerator.SongTabView.SongCoordinator.toggleAllSongsByAlbums(albums: Swift.Set&lt;PlaylistGenerator.SongFile&gt;) async -&gt; ()"
+                  moduleName = "PlaylistGenerator.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/oliviastapleton/Documents/PlaylistGenerator/PlaylistGenerator/Templates/SongTabTemplate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69">
+               </Location>
+               <Location
+                  uuid = "9CBD117F-E45D-47B0-BBDE-26A307151902 - fe7e53ae8f602922"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (PlaylistGenerator.SongFile) -&gt; Swift.String in PlaylistGenerator.SongTabView.SongCoordinator.toggleAllSongsByAlbums(albums: Swift.Set&lt;PlaylistGenerator.SongFile&gt;) async -&gt; ()"
+                  moduleName = "PlaylistGenerator.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/oliviastapleton/Documents/PlaylistGenerator/PlaylistGenerator/Templates/SongTabTemplate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -418,6 +476,36 @@
             endingLineNumber = "70"
             landmarkName = "toggleAllSongsByAlbums(albums:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7F1C0312-984A-4AB1-AEF0-9147306E1648 - 3fad7a541bf52c43"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for PlaylistGenerator.SongTabView.SongCoordinator.toggleAllSongsByAlbums(albums: Swift.Set&lt;PlaylistGenerator.SongFile&gt;) async -&gt; ()"
+                  moduleName = "PlaylistGenerator.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/oliviastapleton/Documents/PlaylistGenerator/PlaylistGenerator/Templates/SongTabTemplate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70">
+               </Location>
+               <Location
+                  uuid = "7F1C0312-984A-4AB1-AEF0-9147306E1648 - b96c2d8872096deb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (PlaylistGenerator.SongFile) -&gt; Swift.Bool in PlaylistGenerator.SongTabView.SongCoordinator.toggleAllSongsByAlbums(albums: Swift.Set&lt;PlaylistGenerator.SongFile&gt;) async -&gt; ()"
+                  moduleName = "PlaylistGenerator.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/oliviastapleton/Documents/PlaylistGenerator/PlaylistGenerator/Templates/SongTabTemplate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -466,6 +554,134 @@
             endingLineNumber = "291"
             landmarkName = "updateToggleButtons(albumArtistCoordinator:songCoordinator:initialSelection:newSelection:type:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9EAED086-387C-4F58-888E-72C47D64C0A5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/MusicBrainzHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "getSongGenre(album:artist:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4A04B8AA-E379-4C6E-912B-C66EDB05C67F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/MusicBrainzHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "getSongGenre(album:artist:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "27D2BB1A-73E3-4D44-A8F8-4B7A2FBEC47D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/MusicBrainzHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "getSongGenre(album:artist:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "85D125AD-684D-467B-8D81-F32A9C7B6F9F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/MusicBrainzHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
+            landmarkName = "getSongGenre(album:artist:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1F3901B1-C1ED-459F-AB9C-05CACFB9626A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/MusicBrainzHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "getSongGenre(album:artist:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0BDACEC0-FFCC-4FBE-8FF3-FD59410AAD69"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/AVGenreTagHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "updateAVGenreTags(fileURLs:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CE13A94E-2953-4651-B97D-F756B451B535"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/AVGenreTagHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "updateAVGenreTags(fileURLs:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3D631537-5CA0-4210-97F4-70721CB1FE0C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlaylistGenerator/Helpers/ID3TagHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "updateID3GenreTags(fileURLs:)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
