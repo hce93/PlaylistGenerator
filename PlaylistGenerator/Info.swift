@@ -129,7 +129,7 @@ struct Info : View {
                     
                     *Note, you will only be able to access this tab once your muis clibrary location is set*
                     
-                    If you select specific artists/genres/albums this will ensure songs from this artist/genre/album will be added to the playlist. The songs that make up the artist/album/genre selection you make will be randomised and then the playlist generator will select one song from each artist/album/genre according to their rating ion Music Brainz's database (which uses user review scores). This will then loop until the playlist is populated.
+                    If you select specific artists/genres/albums this will ensure songs from this artist/genre/album will be added to the playlist. The songs that make up the artist/album/genre selection you make will be randomised and then the playlist generator will select one song from each artist/album/genre according to their rating in the Music Brainz's database (which uses user review scores). This will then loop until the playlist is populated.
                     
                     Below the tables you will find a "% in playlist" selector. Here you can dictate the % that you want the artists, albums and genres to take up within the playlist. As soon as you make your initial selection by default that catageory will assume 100% of the playlist. Once you make selections from other categories you will then be able to adjust the selectors to suit the playlist you want to create. 
                     
