@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D91C03642CE3B8F80083D50D /* ID3TagEditor in Frameworks */ = {isa = PBXBuildFile; productRef = D9D6685B2CD005F700AF4B25 /* ID3TagEditor */; };
 		D9C208342D00A55C00F0AEAB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D9C208332D00A55C00F0AEAB /* Info.plist */; };
+		F86F17222D159AEC006F3E73 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F86F17212D159AE3006F3E73 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		D9C4FBE32CC6900B00FA3988 /* PlaylistGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaylistGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9C4FBF42CC6900D00FA3988 /* PlaylistGeneratorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaylistGeneratorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9C4FBFE2CC6900D00FA3988 /* PlaylistGeneratorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaylistGeneratorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F86F17212D159AE3006F3E73 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -104,6 +106,7 @@
 		D9C4FBDA2CC6900B00FA3988 = {
 			isa = PBXGroup;
 			children = (
+				F86F17212D159AE3006F3E73 /* README.md */,
 				D9C208332D00A55C00F0AEAB /* Info.plist */,
 				D9C4FBE52CC6900B00FA3988 /* PlaylistGenerator */,
 				D9C4FBF72CC6900D00FA3988 /* PlaylistGeneratorTests */,
@@ -248,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F86F17222D159AEC006F3E73 /* README.md in Resources */,
 				D9C208342D00A55C00F0AEAB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
